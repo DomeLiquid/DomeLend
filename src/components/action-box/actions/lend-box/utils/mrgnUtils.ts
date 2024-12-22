@@ -39,6 +39,7 @@ export const formatAmount = (
   bank: ExtendedBankInfo | null,
   numberFormater: Intl.NumberFormat,
 ) => {
+  return newAmount;
   let formattedAmount: string, amount: number;
   // Remove commas from the formatted string
   const newAmountWithoutCommas = newAmount.replace(/,/g, '');

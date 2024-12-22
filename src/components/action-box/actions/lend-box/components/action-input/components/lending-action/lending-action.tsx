@@ -41,7 +41,6 @@ export const LendingAction = ({
       amount !== undefined
         ? `${clampedNumeralFormatter(amount)} ${symbol}`
         : '-';
-
     switch (lendMode) {
       case ActionType.Deposit:
         return {
@@ -52,37 +51,32 @@ export const LendingAction = ({
         return {
           label: 'Max Borrow: ',
           amount: formatAmount(
-            decimalStrToNumber(selectedBank.info.bankConfig.liabilityLimit.toString()),
+            selectedBank?.isActive
+              ? selectedBank.userInfo.maxBorrow
+              : undefined,
             selectedBank?.token.symbol,
           ),
         };
-
       case ActionType.Withdraw:
         return {
           amount: formatAmount(
             selectedBank?.isActive
-              ? decimalStrToNumber(
-                  selectedBank.balanceWithLendingPosition.amount.toString(),
-                )
+              ? selectedBank.balanceWithLendingPosition.amount
               : undefined,
             selectedBank?.token.symbol,
           ),
           label: 'Supplied: ',
         };
-
       case ActionType.Repay:
         return {
           amount: formatAmount(
             selectedBank?.isActive
-              ? decimalStrToNumber(
-                  selectedBank.balanceWithLendingPosition.amount.toString(),
-                )
+              ? selectedBank.balanceWithLendingPosition.amount
               : undefined,
             selectedBank?.token.symbol,
           ),
           label: 'Borrowed: ',
         };
-
       default:
         return { amount: '-' };
     }
@@ -104,7 +98,7 @@ export const LendingAction = ({
 
               <div>{maxLabel.amount}</div>
               <button
-                className="text-chartreuse hover:border-chartreuse cursor-pointer border-b border-transparent transition"
+                className="cursor-pointer border-b border-transparent text-chartreuse transition hover:border-chartreuse"
                 disabled={maxAmount === 0}
                 onClick={() => onSetAmountRaw(numberFormater.format(maxAmount))}
               >

@@ -42,30 +42,6 @@ const MobileFooter = ({
             </div>
           );
         })}
-
-        <div className="flex flex-1 justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="group flex flex-col items-center gap-2">
-                <MoreHorizontal className="h-6 w-6 font-bold group-hover:text-purple-500" />
-                <span className="text-sm font-bold group-hover:text-purple-500">
-                  More
-                </span>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <span className="text-sm">Item 1</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span className="text-sm">Item 2</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span className="text-sm">Item 3</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
       </div>
     </div>
   );

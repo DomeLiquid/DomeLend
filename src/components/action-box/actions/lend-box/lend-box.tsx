@@ -109,6 +109,10 @@ export const LendBox = ({
     },
   );
 
+  if (selectedBank?.isActive && selectedBank.userInfo) {
+    console.log(selectedBank.userInfo);
+  }
+
   React.useEffect(() => {
     fetchActionBoxState({
       requestedLendType,
@@ -162,10 +166,13 @@ export const LendBox = ({
     if (!selectedBank?.isActive) return null;
 
     const hasLendingPosition =
-      selectedBank.balanceWithLendingPosition?.lendingPosition?.isLending;
+      selectedBank.balanceWithLendingPosition?.lendingPosition?.isLending &&
+      Number(selectedBank.balanceWithLendingPosition?.lendingPosition?.amount) >
+        0;
     const hasBorrowPosition =
       !selectedBank.balanceWithLendingPosition?.lendingPosition?.isLending &&
-      selectedBank.balanceWithLendingPosition?.amount > 0;
+      Number(selectedBank.balanceWithLendingPosition?.lendingPosition?.amount) >
+        0;
 
     if (lendMode === ActionType.Deposit && hasBorrowPosition) {
       return {

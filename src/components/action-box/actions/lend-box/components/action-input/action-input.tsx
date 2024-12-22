@@ -70,11 +70,14 @@ export const ActionInput = ({
 
     const hasLendingPosition =
       selectedBank.isActive &&
-      selectedBank.balanceWithLendingPosition?.lendingPosition?.isLending;
+      selectedBank.balanceWithLendingPosition?.lendingPosition?.isLending &&
+      Number(selectedBank.balanceWithLendingPosition?.lendingPosition?.amount) >
+        0;
     const hasBorrowPosition =
       selectedBank.isActive &&
       !selectedBank.balanceWithLendingPosition?.lendingPosition?.isLending &&
-      selectedBank.balanceWithLendingPosition?.amount > 0;
+      Number(selectedBank.balanceWithLendingPosition?.lendingPosition?.amount) >
+        0;
 
     if (lendMode === ActionType.Deposit && hasBorrowPosition) {
       return {
@@ -179,7 +182,6 @@ export const ActionInput = ({
           lendMode={lendMode}
         />
       </div>
-
       {bankValidation && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />

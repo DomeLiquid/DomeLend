@@ -62,6 +62,7 @@ function getCurrentAction(
     }
   }
 }
+
 function makeExtendedBankInfo(
   bankWithState: BankWithState,
   tokenWithPriceMetadata: TokenWithPriceMetadata,
@@ -69,17 +70,30 @@ function makeExtendedBankInfo(
   emissionTokenWithPriceMetadata?: TokenWithPriceMetadata,
   assetAmountMap?: Map<string, number>,
 ): ExtendedBankInfo {
+  // 1. 获取钱包余额
   const walletBalance =
     assetAmountMap?.get(bankWithState.mixinSafeAssetId) ?? 0;
+
+  // 2. 计算最大存款额度 (maxDeposit)
   const maxDeposit = Math.max(
     0,
-    Math.min(walletBalance, bankWithState.state.borrowCap),
-  );
-  const maxBorrow = Math.min(
-    bankWithState.state.borrowCap,
-    bankWithState.state.availableLiquidity,
+    Math.min(
+      walletBalance, // 不能超过钱包余额
+      bankWithState.state.depositCap - (bankWithState.state.totalDeposits || 0), // 不能超过存款上限减去当前总存款
+      bankWithState.state.borrowCap, // 不能超过借款上限
+    ),
   );
 
+  // 3. 计算最大借款额度 (maxBorrow)
+  const maxBorrow = Math.max(
+    0,
+    bankWithState.state.availableLiquidity, // 不能超过可用流动性
+    // Math.min(
+    //   bankWithState.state.borrowCap - (bankWithState.state.totalBorrows || 0), // 不能超过借款上限减去当前总借款
+    // ),
+  );
+
+  // 如果用户没有借贷位置或位置已过期，返回基础信息
   if (
     !balanceWithLendingPosition ||
     !balanceWithLendingPosition.lendingPosition ||
@@ -101,24 +115,34 @@ function makeExtendedBankInfo(
         maxRepay: 0,
         maxWithdraw: 0,
         maxBorrow,
-      } as UserInfo,
+      },
     } as InactiveBankInfo;
   }
 
-  const maxWithdraw = Math.min(
-    bankWithState.state.availableLiquidity,
-    balanceWithLendingPosition.lendingPosition?.isLending
-      ? balanceWithLendingPosition.lendingPosition.amount ?? 0
-      : 0,
+  // 4. 计算最大提现额度 (maxWithdraw)
+  const lendingPosition = balanceWithLendingPosition.lendingPosition;
+  const maxWithdraw = Math.max(
+    0,
+    Math.min(
+      bankWithState.state.availableLiquidity, // 不能超过可用流动性
+      lendingPosition?.isLending
+        ? lendingPosition.amount ?? 0 // 如果是存款位置，不能超过存款金额
+        : 0,
+    ),
   );
 
-  const maxRepay = Math.min(
-    walletBalance,
-    balanceWithLendingPosition.lendingPosition?.isLending
-      ? 0
-      : balanceWithLendingPosition.lendingPosition.amount ?? 0,
+  // 5. 计算最大还款额度 (maxRepay)
+  const maxRepay = Math.max(
+    0,
+    Math.min(
+      walletBalance, // 不能超过钱包余额
+      !lendingPosition?.isLending
+        ? lendingPosition?.amount ?? 0 // 如果是借款位置，不能超过借款金额
+        : 0,
+    ),
   );
 
+  // 返回完整的银行信息
   return {
     bankId: bankWithState.id,
     token: tokenWithPriceMetadata,
@@ -140,6 +164,85 @@ function makeExtendedBankInfo(
     },
   };
 }
+
+// function makeExtendedBankInfo(
+//   bankWithState: BankWithState,
+//   tokenWithPriceMetadata: TokenWithPriceMetadata,
+//   balanceWithLendingPosition?: BalanceWithLendingPosition,
+//   emissionTokenWithPriceMetadata?: TokenWithPriceMetadata,
+//   assetAmountMap?: Map<string, number>,
+// ): ExtendedBankInfo {
+//   const walletBalance =
+//     assetAmountMap?.get(bankWithState.mixinSafeAssetId) ?? 0;
+//   const maxDeposit = Math.max(
+//     0,
+//     Math.min(walletBalance, bankWithState.state.borrowCap),
+//   );
+//   const maxBorrow = Math.min(
+//     bankWithState.state.borrowCap,
+//     bankWithState.state.availableLiquidity,
+//   );
+
+//   if (
+//     !balanceWithLendingPosition ||
+//     !balanceWithLendingPosition.lendingPosition ||
+//     balanceWithLendingPosition.lastUpdate === 0
+//   ) {
+//     return {
+//       bankId: bankWithState.id,
+//       token: tokenWithPriceMetadata,
+//       info: bankWithState,
+//       isActive: false,
+//       userInfo: {
+//         userAssetAmount: walletBalance
+//           ? {
+//               assetId: bankWithState.mixinSafeAssetId,
+//               amount: walletBalance,
+//             }
+//           : undefined,
+//         maxDeposit,
+//         maxRepay: 0,
+//         maxWithdraw: 0,
+//         maxBorrow,
+//       } as UserInfo,
+//     } as InactiveBankInfo;
+//   }
+
+//   const maxWithdraw = Math.min(
+//     bankWithState.state.availableLiquidity,
+//     balanceWithLendingPosition.lendingPosition?.isLending
+//       ? balanceWithLendingPosition.lendingPosition.amount ?? 0
+//       : 0,
+//   );
+
+//   const maxRepay = Math.min(
+//     walletBalance,
+//     balanceWithLendingPosition.lendingPosition?.isLending
+//       ? 0
+//       : balanceWithLendingPosition.lendingPosition.amount ?? 0,
+//   );
+
+//   return {
+//     bankId: bankWithState.id,
+//     token: tokenWithPriceMetadata,
+//     info: bankWithState,
+//     isActive: true,
+//     balanceWithLendingPosition,
+//     emissionTokenWithPriceMetadata,
+//     userInfo: {
+//       userAssetAmount: walletBalance
+//         ? {
+//             assetId: bankWithState.mixinSafeAssetId,
+//             amount: walletBalance,
+//           }
+//         : undefined,
+//       maxDeposit,
+//       maxRepay,
+//       maxWithdraw,
+//       maxBorrow,
+//     },
+//   };
+// }
 
 export { DEFAULT_ACCOUNT_SUMMARY };
 

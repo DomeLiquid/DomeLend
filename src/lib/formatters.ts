@@ -71,7 +71,7 @@ const clampedNumeralFormatter = (value: number) => {
   } else if (value < 0.00000001) {
     return '< 0.00000001';
   } else if (value < 1) {
-    return value;
+    return numeral(value).format('0.00000000a');
   } else {
     return numeral(value).format('0.00a');
   }

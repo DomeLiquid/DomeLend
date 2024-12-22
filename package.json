@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3003",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 4000",
     "lint": "next lint",
     "format": "pnpm prettier ./src --write",
     "format:check": "pnpm prettier ./src --check",
@@ -36,7 +36,7 @@
     "@radix-ui/react-tooltip": "1.0.7",
     "@radix-ui/react-visually-hidden": "^1.1.1",
     "@t3-oss/env-nextjs": "^0.10.1",
-    "@tailwindcss/typography": "github:tailwindcss/typography",
+    "@tailwindcss/typography": "^v0.5.1",
     "@tanstack/react-table": "^8.15.3",
     "@types/lodash.debounce": "^4.0.9",
     "class-variance-authority": "^0.7.0",

@@ -42,19 +42,17 @@ export function getAmountStat(
   return {
     label: 'Your amount',
     value: () => (
-      <>
+      <span className="flex items-center whitespace-nowrap">
         {clampedNumeralFormatter(currentAmount)} {symbol}
         {simulatedAmount !== undefined ? (
-          <ArrowRight width={12} height={12} />
+          <>
+            <ArrowRight width={12} height={12} className="mx-1" />
+            {clampedNumeralFormatter(simulatedAmount)} {symbol}
+          </>
         ) : (
           <></>
         )}
-        {simulatedAmount !== undefined ? (
-          clampedNumeralFormatter(simulatedAmount) + ' ' + symbol
-        ) : (
-          <></>
-        )}
-      </>
+      </span>
     ),
   };
 }
