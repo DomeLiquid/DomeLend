@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import TabbedInterface from '../tabs';
+import { useState } from 'react';
 
 interface MobileHeaderProps {
   session: Session | null;
@@ -40,8 +41,10 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   onOpenChange,
   onSelectAccount,
 }) => {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
   return (
-    <Sheet>
+    <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
       <div className="flex items-center md:hidden">
         {session?.user ? (
           <SheetTrigger asChild>
@@ -81,21 +84,21 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
                 <AvatarFallback>A</AvatarFallback>
               </Avatar>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 onClick={() => signOut()}
-                className="aspect-square rounded-full"
+                className="aspect-square rounded-full p-2"
               >
-                <LogOut className="h-5 w-5" />
+                <LogOut className="h-6 w-6" />
               </Button>
-              {/* <Button
+              <Button
                 variant="ghost"
-                className="aspect-square rounded-full"
-                onClick={() => onOpenChange(false)}
+                className="aspect-square rounded-full p-2"
+                onClick={() => setSheetOpen(false)}
               >
-                <CircleX className="h-5 w-5" />
-              </Button> */}
+                <CircleX className="h-6 w-6" />
+              </Button>
             </div>
           </div>
         </SheetHeader>
