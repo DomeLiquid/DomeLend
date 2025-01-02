@@ -20,12 +20,12 @@ module.exports = {
         NODE_ENV: 'production',
       },
 
-      watch: true, 
+      watch: true,
       max_memory_restart: '200M',
-      autorestart: true, 
-      restart_delay: 5000, 
-      error_file: './logs/err.log', 
-      out_file: './logs/out.log', 
+      autorestart: true,
+      restart_delay: 5000,
+      error_file: './logs/err.log',
+      out_file: './logs/out.log',
     }
   ]
 }
