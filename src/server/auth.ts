@@ -85,7 +85,7 @@ export const authOptions: NextAuthOptions = {
       name: 'mixin',
       type: 'oauth',
       style: {
-        logo: 'https://mixin.one/zh/img/favicon.png',
+        logo: 'https://mixin.one/icons/favicon.ico',
         bg: '#24292f',
         text: '#fff',
       },

@@ -168,7 +168,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
         </div>
 
         <div className="mt-6">
-          <TabbedInterface />
+          <TabbedInterface setSheetOpen={setSheetOpen} />
         </div>
       </SheetContent>
     </Sheet>

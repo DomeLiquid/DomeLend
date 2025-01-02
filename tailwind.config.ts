@@ -52,7 +52,8 @@ const config = {
         'background-gray-light': '#1B2022',
         'background-gray-dark': '#0C0F11',
         foreground: 'hsl(var(--foreground))',
-        chartreuse: '#DCE85D',
+        chartreuse: '#8A64D0',
+        // purple: '#8A64D0',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import TabbedInterface from '../tabs';
+import { useState } from 'react';
 
 interface DesktopHeaderProps {
   session: Session | null;
@@ -43,6 +44,8 @@ export const DesktopHeader: React.FC<DesktopHeaderProps> = ({
   onOpenChange,
   onSelectAccount,
 }) => {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
   return (
     <>
       <Link
@@ -64,7 +67,7 @@ export const DesktopHeader: React.FC<DesktopHeaderProps> = ({
       <DesktopNav className="flex flex-1 justify-center" />
 
       <div className="flex items-center space-x-4">
-        <Sheet>
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <div className="hidden md:block">
             {session?.user ? (
               <SheetTrigger asChild>
@@ -185,7 +188,7 @@ export const DesktopHeader: React.FC<DesktopHeaderProps> = ({
             </div>
 
             <div className="mt-6">
-              <TabbedInterface />
+              <TabbedInterface setSheetOpen={setSheetOpen} />
             </div>
           </SheetContent>
         </Sheet>

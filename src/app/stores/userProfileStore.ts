@@ -1,3 +1,9 @@
+import { getPointsDataForUser, getPointsInfos } from '@/lib/actions';
+import {
+  DEFAULT_USER_POINTS_DATA,
+  PointsInfo,
+  UserPointsData,
+} from '@/lib/points';
 import { User } from 'next-auth';
 import { create } from 'zustand';
 
@@ -10,11 +16,16 @@ interface UserProfileState {
   showBadges: boolean;
   currentUser: User | null;
   hasUser: boolean | null;
+  userPointsData: UserPointsData;
+  pointsInfos: PointsInfo[];
 
   // Actions
   setLendZoomLevel: (level: ZoomLevel) => void;
   setDenominationUSD: (checked: boolean) => void;
   setShowBadges: (checked: boolean) => void;
+  fetchPointsInfos: () => Promise<void>;
+  fetchPoints: () => Promise<void>;
+
   //   checkForFirebaseUser: (walletAddress: string) => Promise<void>;
   //   setFirebaseUser: (user: User | null) => void;
   //   signoutFirebaseUser: (
@@ -32,6 +43,8 @@ function createUserProfileStore() {
     showBadges: false,
     currentUser: null,
     hasUser: null,
+    pointsInfos: [],
+    userPointsData: DEFAULT_USER_POINTS_DATA,
 
     // Actions
     setLendZoomLevel: (level: ZoomLevel) =>
@@ -39,6 +52,9 @@ function createUserProfileStore() {
     setDenominationUSD: (checked: boolean) =>
       set(() => ({ denominationUSD: checked })),
     setShowBadges: (checked: boolean) => set(() => ({ showBadges: checked })),
+    fetchPoints: async () =>
+      set({ userPointsData: await getPointsDataForUser() }),
+    fetchPointsInfos: async () => set({ pointsInfos: await getPointsInfos() }),
   }));
 }
 

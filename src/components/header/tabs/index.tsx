@@ -2,12 +2,17 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import PointsTab from './points-tab';
 import ActivityTab from './activity-tab';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 
-export default function TabbedInterface() {
+export default function TabbedInterface({
+  setSheetOpen,
+}: {
+  setSheetOpen: any;
+}) {
   const [activeTab, setActiveTab] = useState('points');
 
   const tabContent: { [key: string]: React.ReactNode } = {
-    points: <PointsTab />,
+    points: <PointsTab setSheetOpen={setSheetOpen} />,
     activity: <ActivityTab />,
   };
 

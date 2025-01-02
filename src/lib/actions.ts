@@ -24,6 +24,7 @@ import {
   SimulatedActionPreview,
 } from '@/components/action-box/actions/lend-box/utils/lend-simulation.utils';
 import { sessionManager } from './sessionManager';
+import { PointsInfo, UserPointsData } from './points';
 
 export async function newAccount() {
   try {
@@ -410,6 +411,69 @@ export async function getPaymentInfo(
   } catch (error) {
     handleError(error);
     return null;
+  }
+}
+
+export async function getPointsInfos(): Promise<PointsInfo[]> {
+  try {
+    const response = await fetch(`${env.NEXT_PUBLIC_BACKEND_URL}/points-info`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(`${data.message}`);
+    }
+
+    const data: PointsInfo[] = await response.json();
+    return data;
+  } catch (error) {
+    handleError(error);
+    return [];
+  }
+}
+
+export async function getPointsDataForUser(): Promise<UserPointsData> {
+  try {
+    const jwtToken = await sessionManager.getJwtToken();
+    if (!jwtToken) {
+      return {
+        owner: '',
+        depositPoints: 0,
+        borrowPoints: 0,
+        referralPoints: 0,
+        userRank: null,
+        totalPoints: 0,
+      };
+    }
+
+    const response = await fetch(`${env.NEXT_PUBLIC_BACKEND_URL}/user-points`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch points data');
+    }
+
+    const data: UserPointsData = await response.json(); // Assuming the response is in JSON format
+    return data;
+  } catch (error) {
+    handleError(error);
+    return {
+      owner: '',
+      depositPoints: 0,
+      borrowPoints: 0,
+      referralPoints: 0,
+      userRank: null,
+      totalPoints: 0,
+    };
   }
 }
 
