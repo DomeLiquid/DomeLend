@@ -53,7 +53,7 @@ export async function getAssetsInfo(
       window.webkit.messageHandlers.getAssets
     ) {
       window.webkit.messageHandlers.getAssets.postMessage([
-        assetIds,
+        [],
         'assetsCallbackFunction',
       ]);
     }
@@ -62,7 +62,7 @@ export async function getAssetsInfo(
       window.MixinContext?.getAssets &&
       typeof window.MixinContext.getAssets === 'function'
     ) {
-      window.MixinContext.getAssets(assetIds, 'assetsCallbackFunction');
+      window.MixinContext.getAssets([], 'assetsCallbackFunction');
     } else {
       throw new Error('No available method to get assets');
     }

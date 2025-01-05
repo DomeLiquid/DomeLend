@@ -16,6 +16,7 @@ import {
   makeExtendedBankInfo,
   TokenWithPriceMetadata,
   TokenWithPriceMetadataMap,
+  UserAssetAmount,
 } from '@/lib/mrgnlend';
 import {
   Asset,
@@ -54,6 +55,7 @@ interface MrgnlendState {
 
   // Actions
   fetchMrgnlendState: (args?: {}) => Promise<void>;
+  fetchAssetAmountMap: () => Promise<void>;
 
   setIsRefreshingStore: (isRefreshingStore: boolean) => void;
   setSelectedAccount: (selectedAccount: Account | null) => void;
@@ -102,7 +104,20 @@ const stateCreator: StateCreator<MrgnlendState, [], []> = (set, get) => ({
 
   extendedBankMetadatas: [],
   extendedBankInfos: [],
-
+  fetchAssetAmountMap: async () => {
+    try {
+      const assets = await getAssetsInfo([]);
+      if (assets && assets.length > 0) {
+        const newAssetAmountMap = new Map();
+        assets.forEach((asset: any) => {
+          newAssetAmountMap.set(asset.asset_id, asset.balance);
+        });
+        set({ assetAmountMap: newAssetAmountMap });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
   fetchMrgnlendState: async (args?: { accountId?: string }) => {
     let Accounts: Account[] = [];
     let selectedAccount: Account | null = null;
@@ -191,23 +206,19 @@ const stateCreator: StateCreator<MrgnlendState, [], []> = (set, get) => ({
         }
       });
     }
-
-    if (!assetAmountMap || assetAmountMap.size === 0) {
+    const newAssetAmountMap = new Map(assetAmountMap);
+    if (assetAmountMap.size === 0) {
       const assetIds = banksWithPriceAndToken.map(
         (bank) => bank.tokenWithPriceMetadata.assetId,
       );
       const assets = await getAssetsInfo(assetIds);
       if (assets && assets.length > 0) {
-        const newAssetAmountMap = new Map();
-        assets.forEach((asset: any) => {
-          newAssetAmountMap.set(
-            asset.asset_id || asset.assetId,
-            asset.balance || asset.amount,
-          );
+        assets.forEach((asset: UserAssetAmount) => {
+          newAssetAmountMap.set(asset.assetId, asset.amount);
         });
-        set({ assetAmountMap: newAssetAmountMap });
       }
     }
+    set({ assetAmountMap: newAssetAmountMap });
 
     let accountSummaryInfo: AccountSummary | null = DEFAULT_ACCOUNT_SUMMARY;
     let balancesWithLendingPositionMap: BalanceWithLendingPositionMap = {};
@@ -237,6 +248,7 @@ const stateCreator: StateCreator<MrgnlendState, [], []> = (set, get) => ({
         console.error('Error fetching account data', error);
       }
     }
+    console.log(newAssetAmountMap);
 
     const extendedBankInfos = banksWithPriceAndToken.reduce(
       (acc: ExtendedBankInfo[], bankWithPriceAndToken) => {
@@ -251,7 +263,7 @@ const stateCreator: StateCreator<MrgnlendState, [], []> = (set, get) => ({
               bankWithPriceAndToken.bankWithState.emissionsMixinSafeAssetId ||
                 ''
             ],
-            assetAmountMap,
+            newAssetAmountMap,
           ),
         );
         return acc;

@@ -29,7 +29,6 @@ export default function PointsPage() {
   useMemo(() => {
     fetchPointsInfos();
     fetchPoints();
-    console.log(userPointsData);
   }, []);
 
   const [isClient, setIsClient] = useState(false);
