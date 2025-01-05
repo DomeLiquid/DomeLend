@@ -1,4 +1,3 @@
-import { PaymentParams } from '@mixin.dev/mixin-node-sdk/src/client/types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { validate, v4 } from 'uuid';
@@ -9,21 +8,6 @@ import { useRef } from 'react';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
-export const buildMixinOneSafePaymentUri = (params: PaymentParams) => {
-  let address = params.uuid;
-  if (params.uuid && validate(params.uuid)) address = params.uuid;
-  const baseUrl = `https://mixin.one/pay/${address}`;
-  const p = {
-    asset: params.asset,
-    amount: params.amount,
-    memo: params.memo,
-    trace: params.trace ?? v4(),
-    return_to: params.returnTo && encodeURIComponent(params.returnTo),
-  };
-  const query = qs.stringify(p);
-  return `${baseUrl}?${query}`;
-};
 
 const defaultOptions: ToastOptions = {
   position: 'bottom-right',

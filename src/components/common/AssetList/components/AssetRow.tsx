@@ -12,7 +12,7 @@ export const AssetRow = (row: Row<AssetListModel>) => {
   const [isHovering, setIsHovering] = React.useState(false);
   const isPosition = React.useMemo(
     () =>
-      // row.original.position.walletAmount ||
+      row.original.position.walletAmount ||
       row.original.position.positionAmount &&
       row.original.position.positionAmount > 0,
     [row.original.position],

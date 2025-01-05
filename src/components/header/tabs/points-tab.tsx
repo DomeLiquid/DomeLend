@@ -32,7 +32,7 @@ const PointsTab = ({ setSheetOpen }: { setSheetOpen: any }) => {
     <div className="space-y-6 text-center">
       <div>
         <h3 className="text-lg font-semibold text-purple-500">Your Points</h3>
-        <p className="text-6xl font-bold">
+        <p className="text-xl font-bold">
           {userPointsData?.totalPoints
             ? numeralFormatter(userPointsData.totalPoints)
             : 'N/A'}

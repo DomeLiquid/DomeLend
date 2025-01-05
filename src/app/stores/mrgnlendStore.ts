@@ -27,6 +27,7 @@ import {
 } from '@/types/account';
 import { create, StateCreator } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { getAssetsInfo } from '../../lib/assets';
 
 interface ProtocolStats {
   deposits: number;
@@ -195,12 +196,16 @@ const stateCreator: StateCreator<MrgnlendState, [], []> = (set, get) => ({
       const assetIds = banksWithPriceAndToken.map(
         (bank) => bank.tokenWithPriceMetadata.assetId,
       );
-      const userAssetsInfo = await getUserAssetsInfo(assetIds);
-      if (userAssetsInfo) {
-        userAssetsInfo.forEach((asset) => {
-          assetAmountMap.set(asset.assetId, asset.amount);
+      const assets = await getAssetsInfo(assetIds);
+      if (assets && assets.length > 0) {
+        const newAssetAmountMap = new Map();
+        assets.forEach((asset: any) => {
+          newAssetAmountMap.set(
+            asset.asset_id || asset.assetId,
+            asset.balance || asset.amount,
+          );
         });
-        set({ assetAmountMap });
+        set({ assetAmountMap: newAssetAmountMap });
       }
     }
 

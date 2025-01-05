@@ -355,13 +355,12 @@ export const getPositionCell = (positionData: PositionData) => {
       <dl className="flex items-center gap-2">
         <dt className="text-xs font-light text-accent-foreground">Wallet:</dt>
         <dd>
-          {/* {positionData.denominationUSD
+          {positionData.denominationUSD
             ? usdFormatter.format(
                 positionData.walletAmount * positionData.price,
               )
-            : `${numeralFormatter(positionData.walletAmount)} ${positionData.symbol}`} */}
-          {'-'}
-          {/* {'$0'} */}
+            : `${numeralFormatter(positionData.walletAmount)} ${positionData.symbol}`}
+          {/* {'-'} */}
         </dd>
       </dl>
       {positionData.positionAmount && (

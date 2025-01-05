@@ -70,7 +70,7 @@ export interface UtilizationData {
 export interface PositionData {
   denominationUSD: boolean;
   price: number;
-  // walletAmount: number;
+  walletAmount: number;
   symbol: string;
   positionAmount?: number;
   positionUsd?: number;
@@ -242,7 +242,7 @@ export const getUtilizationData = (
 
 export const getPositionData = (
   bank: ExtendedBankInfo,
-  denominationUSD: boolean, // TODO: remove this
+  denominationUSD: boolean,
   // nativeSolBalance: number,
   isInLendingMode: boolean,
 ): PositionData => {
@@ -250,7 +250,9 @@ export const getPositionData = (
     liquidationPrice,
     positionUsd,
     isUserPositionPoorHealth = false;
-  const walletAmount: number = 0;
+
+  const walletAmount =
+    0 || (bank.isActive ? bank.userInfo.userAssetAmount?.amount : 0);
 
   if (
     bank.isActive &&
