@@ -19,8 +19,6 @@ import { AlertTriangle, ArrowRight, Info } from 'lucide-react';
 import { ActiveBankInfo, ExtendedBankInfo } from './mrgnlend';
 import { cn, decimalStrToNumber } from './utils';
 
-export const REDUCE_ONLY_BANKS = ['stSOL', 'RLB'];
-
 export interface PreviewStat {
   label: string;
   color?: 'SUCCESS' | 'ALERT' | 'DESTRUCTIVE';

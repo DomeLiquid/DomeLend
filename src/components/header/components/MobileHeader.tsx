@@ -19,6 +19,8 @@ import {
 import { Badge } from '@/components/ui/badge';
 import TabbedInterface from '../tabs';
 import { useState } from 'react';
+import { LangSwitcher } from '../lang-switcher';
+import { ModeToggle } from '@/components/themed-button';
 
 interface MobileHeaderProps {
   session: Session | null;
@@ -176,6 +178,11 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           {/* Tabbed Interface */}
           <div className="mt-6">
             <TabbedInterface setSheetOpen={setSheetOpen} />
+          </div>
+
+          <div className="flex items-center justify-center gap-2 pt-1">
+            <LangSwitcher />
+            {/* <ModeToggle /> */}
           </div>
         </SheetContent>
       </Sheet>

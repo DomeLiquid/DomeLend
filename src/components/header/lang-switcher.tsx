@@ -9,7 +9,7 @@ import { localeNames } from '@/i18n';
 import { usePathname, useRouter } from '@/navigation';
 import { useLocale } from 'next-intl';
 
-export const LangSwitcher = () => {
+export const LangSwitcher = ({ className }: { className?: string }) => {
   const router = useRouter();
   const locale = useLocale();
   const pathname = usePathname();
@@ -19,25 +19,27 @@ export const LangSwitcher = () => {
   };
 
   return (
-    <Select value={locale} onValueChange={handleSwitchLanguage}>
-      <SelectTrigger aria-label="select language" className="w-fit">
-        <SelectValue placeholder="Language" />
-      </SelectTrigger>
-      <SelectContent>
-        {Object.keys(localeNames).map((key: string) => {
-          const name = localeNames[key];
-          return (
-            <SelectItem
-              aria-label={key}
-              className="cursor-pointer"
-              key={key}
-              value={key}
-            >
-              {name}
-            </SelectItem>
-          );
-        })}
-      </SelectContent>
-    </Select>
+    <div className={className}>
+      <Select value={locale} onValueChange={handleSwitchLanguage}>
+        <SelectTrigger aria-label="select language">
+          <SelectValue placeholder="Language" />
+        </SelectTrigger>
+        <SelectContent>
+          {Object.keys(localeNames).map((key: string) => {
+            const name = localeNames[key];
+            return (
+              <SelectItem
+                aria-label={key}
+                className="cursor-pointer"
+                key={key}
+                value={key}
+              >
+                {name}
+              </SelectItem>
+            );
+          })}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };

@@ -23,8 +23,12 @@ const groupedNumberFormatter = new CustomNumberFormat('en-US', {
   maximumFractionDigits: 2,
 });
 
-const numeralFormatter = (value: number) => {
-  if (value < 0.00000001) {
+const numeralFormatter = (value: number | string) => {
+  if (value === 0) {
+    return '-';
+  } else if (typeof value === 'string' && parseFloat(value) < 0.00000001) {
+    return '0';
+  } else if (typeof value === 'number' && value < 0.00000001) {
     return '0';
   } else {
     return numeral(value).format('0.00000000a');

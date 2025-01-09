@@ -19,7 +19,6 @@ const useLendBoxDialogStore: UseBoundStore<StoreApi<LendBoxState>> =
 const useLendBoxStore = (
   isDialog?: boolean,
 ): UseBoundStore<StoreApi<LendBoxState>> => {
-  // console.log('isDialog', isDialog);
   // if (!isDialog) {
   //   return useLendBoxGeneralStore;
   // } else {

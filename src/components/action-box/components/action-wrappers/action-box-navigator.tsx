@@ -5,6 +5,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { ActionType } from '@/lib/mrgnlend';
 import { Sparkles } from 'lucide-react';
 import Meteors from '@/components/magicui/meteors';
+import { useTranslations } from 'next-intl';
 
 interface ActionBoxNavigatorProps {
   selectedAction: ActionType;
@@ -63,6 +64,7 @@ export const ActionBoxNavigator = ({
     }));
   }, [actionTypes, isNavigator]);
 
+  const t = useTranslations('Lend');
   return (
     <>
       <div className="mb-2 flex flex-row items-center justify-between">
@@ -92,7 +94,7 @@ export const ActionBoxNavigator = ({
                         <Sparkles size={16} /> {toggle.text}
                       </div>
                     ) : (
-                      toggle.text
+                      t(`${toggle.text}` as any)
                     )}
                   </ToggleGroupItem>
                 ))}

@@ -38,10 +38,11 @@ export const BankListWrapper = ({
             hidePadding={true}
             size="sm"
             position="top"
+            aria-describedby="bank-list-description"
           >
-            <DialogHeader className="sr-only">
-              <DialogTitle>{label}</DialogTitle>
-              <DialogDescription>
+            <DialogHeader>
+              <DialogTitle className="sr-only">{label}</DialogTitle>
+              <DialogDescription id="bank-list-description" className="sr-only">
                 Select a token to add to your wallet
               </DialogDescription>
             </DialogHeader>

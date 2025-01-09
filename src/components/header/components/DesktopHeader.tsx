@@ -7,7 +7,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ChevronDown, CircleX, LogOut, Plus } from 'lucide-react';
+import { ChevronDown, LogOut, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { signIn, signOut } from 'next-auth/react';
 import { Link } from '@/navigation';
@@ -22,6 +22,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import TabbedInterface from '../tabs';
 import { useState } from 'react';
+import { LangSwitcher } from '../lang-switcher';
 
 interface DesktopHeaderProps {
   session: Session | null;
@@ -65,6 +66,7 @@ export const DesktopHeader: React.FC<DesktopHeaderProps> = ({
       </Link>
 
       <DesktopNav className="flex flex-1 justify-center" />
+      <LangSwitcher className="pr-4" />
 
       <div className="flex items-center space-x-4">
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>

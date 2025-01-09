@@ -13,8 +13,9 @@ export const AssetRow = (row: Row<AssetListModel>) => {
   const isPosition = React.useMemo(
     () =>
       row.original.position.walletAmount ||
-      row.original.position.positionAmount &&
-      row.original.position.positionAmount > 0,
+      row.original.position.walletAmount > 0 ||
+      (row.original.position.positionAmount &&
+        row.original.position.positionAmount > 0),
     [row.original.position],
   );
   const [assetListSearch] = useUiStore((state) => [state.assetListSearch]);

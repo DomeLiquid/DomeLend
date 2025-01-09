@@ -3,14 +3,14 @@ import { Pathnames } from 'next-intl/navigation';
 import { getRequestConfig } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
-export const locales = ['en'] as const;
-// export const locales = ['en', 'zh', 'ja', 'ar', 'es', 'ru'] as const;
+// export const locales = ['en'] as const;
+export const locales = ['en', 'zh', 'ja', 'ar', 'es', 'ru'] as const;
 
 export const localePrefix = 'as-needed';
 
 export const localeNames: any = {
   en: '🇺🇸 English',
-  // zh: '🇨🇳 中文',
+  zh: '🇨🇳 中文',
   // ja: '🇯🇵 日本語',
   // ar: '🇸🇦 العربية',
   // es: '🇪🇸 Español',
