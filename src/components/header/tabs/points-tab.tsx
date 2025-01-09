@@ -19,7 +19,6 @@ const PointsTab = ({ setSheetOpen }: { setSheetOpen: any }) => {
   useMemo(() => {
     fetchPointsInfos();
     fetchPoints();
-    console.log(userPointsData);
   }, []);
 
   const [isClient, setIsClient] = useState(false);

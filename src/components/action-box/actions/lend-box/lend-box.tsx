@@ -12,7 +12,7 @@ import {
   ExtendedBankInfo,
 } from '@/lib/mrgnlend';
 import { Account } from '@/types/account';
-import React from 'react';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useActionBoxStore } from '../../store';
 import { useActionAmounts } from '@/hooks';
 import { useLendSimulation } from './hooks';
@@ -100,25 +100,32 @@ export const LendBox = ({
 
   const actionBoxStore = useActionBoxStore();
 
-  const { amount, debouncedAmount, walletAmount, maxAmount } = useActionAmounts(
-    {
-      amountRaw: amountRaw,
-      selectedBank: selectedBank,
-      actionMode: lendMode,
-      assetAmountMap,
+  const handleBankUpdate = useCallback(
+    (bank: ExtendedBankInfo | null) => {
+      setSelectedBank(bank);
+      // 重置相关状态
+      setAmountRaw('');
+      setErrorMessage(null);
+      setSimulationResult(null);
     },
+    [setSelectedBank, setAmountRaw, setErrorMessage, setSimulationResult],
   );
 
-  if (selectedBank?.isActive && selectedBank.userInfo) {
-    console.log(selectedBank.userInfo);
-  }
+  React.useEffect(() => {
+    if (
+      requestedBank &&
+      (!selectedBank || selectedBank.bankId !== requestedBank.bankId)
+    ) {
+      handleBankUpdate(requestedBank);
+    }
+  }, [requestedBank?.bankId]);
 
   React.useEffect(() => {
     fetchActionBoxState({
       requestedLendType,
       requestedBank: requestedBank ?? undefined,
     });
-  }, [requestedLendType, requestedBank, fetchActionBoxState]);
+  }, [requestedLendType, requestedBank?.bankId, fetchActionBoxState]);
 
   React.useEffect(() => {
     if (!connected) {
@@ -126,17 +133,42 @@ export const LendBox = ({
     }
   }, [refreshState, connected, lendMode]);
 
-  React.useMemo(() => {
-    if (requestedBank) {
-      setSelectedBank(requestedBank);
-    }
-  }, [requestedBank]);
+  const actionAmountsParams = useMemo(
+    () => ({
+      amountRaw,
+      selectedBank,
+      actionMode: lendMode,
+      assetAmountMap,
+    }),
+    [amountRaw, selectedBank, lendMode, assetAmountMap],
+  );
 
-  React.useEffect(() => {
-    if (requestedBank) {
-      setSelectedBank(requestedBank);
-    }
-  }, []);
+  const { amount, debouncedAmount, walletAmount, maxAmount } =
+    useActionAmounts(actionAmountsParams);
+
+  // useEffect(() => {
+  //   console.log('状态更新:', {
+  //     bank: selectedBank?.token.symbol,
+  //     mode: lendMode,
+  //     amount: amountRaw,
+  //     max: maxAmount,
+  //   });
+  // }, [selectedBank, lendMode, amountRaw, maxAmount]);
+
+  // const renderCountRef = useRef(0);
+
+  // useEffect(() => {
+  //   renderCountRef.current += 1;
+  //   console.log(
+  //     'maxAmount changed times: ',
+  //     renderCountRef.current,
+  //     'maxAmount: ',
+  //     maxAmount,
+  //   );
+  // }, [maxAmount]);
+
+  if (selectedBank?.isActive && selectedBank.userInfo) {
+  }
 
   const { actionSummary } = useLendSimulation({
     debouncedAmount: debouncedAmount ?? 0,
@@ -149,18 +181,6 @@ export const LendBox = ({
     setErrorMessage,
     setIsLoading,
   });
-
-  // Cleanup the store when the wallet disconnects
-  React.useEffect(() => {
-    refreshState(lendMode);
-  }, [connected, lendMode]);
-
-  React.useEffect(() => {
-    fetchActionBoxState({
-      requestedLendType,
-      requestedBank: requestedBank ?? undefined,
-    });
-  }, [requestedLendType, requestedBank]);
 
   const bankValidation = React.useMemo(() => {
     if (!selectedBank?.isActive) return null;

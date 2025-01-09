@@ -40,6 +40,7 @@ import { useMrgnlendStore, useUiStore } from '@/app/stores';
 import { useHeaderState } from '@/hooks/useHeaderState';
 import { MobileHeader } from './components/MobileHeader';
 import { DesktopHeader } from './components/DesktopHeader';
+import { useTranslations } from 'next-intl';
 
 const Header = () => {
   const {
@@ -53,6 +54,7 @@ const Header = () => {
     setIsOpen,
     setSelectedAccount,
   } = useHeaderState();
+  const t = useTranslations('Header');
 
   return (
     <header className="sticky top-0 z-50 flex w-full flex-col border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

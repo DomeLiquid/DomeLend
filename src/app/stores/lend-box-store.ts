@@ -122,17 +122,22 @@ const stateCreator: StateCreator<LendBoxState, [], []> = (set, get) => ({
   },
 
   setSelectedBank(tokenBank) {
-    const selectedBank = get().selectedBank;
-    const hasBankChanged =
-      !tokenBank || !selectedBank || tokenBank.bankId !== selectedBank.bankId;
-
-    if (hasBankChanged) {
-      set({
-        selectedBank: tokenBank,
-        amountRaw: '',
-        errorMessage: null,
-      });
+    const currentState = get();
+    // 如果新旧 bank 相同，不做更新
+    if (
+      tokenBank?.bankId === currentState.selectedBank?.bankId &&
+      tokenBank?.isActive === currentState.selectedBank?.isActive
+    ) {
+      return;
     }
+
+    set({
+      selectedBank: tokenBank,
+      amountRaw: '',
+      errorMessage: null,
+      simulationResult: null,
+      isLoading: false,
+    });
   },
 
   setLendMode(lendMode) {

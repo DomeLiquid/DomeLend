@@ -13,11 +13,11 @@ export default function Home() {
       <main className="mt-24 flex items-center justify-center">
         <div className="container flex max-w-[64rem] flex-col items-center gap-8 text-center">
           <h1 className="text-4xl font-semibold sm:text-5xl md:text-6xl lg:text-7xl">
-            {t('title')}
+            {/* {t('title')} */}
           </h1>
 
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-            {t('description')}
+            {/* {t('description')} */}
           </p>
 
           <div className="flex gap-2">

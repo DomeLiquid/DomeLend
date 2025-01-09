@@ -3,12 +3,13 @@
 import { navConfig } from '@/config/config';
 import { cn } from '@/lib/utils';
 import { Link, usePathname } from '@/navigation';
+import { useTranslations } from 'next-intl';
 
 interface DesktopNavProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function DesktopNav({ className, ...props }: DesktopNavProps) {
   const pathname = usePathname();
-
+  const t = useTranslations('Header');
   return (
     <div className={className} {...props}>
       <nav className="flex items-center space-x-6 text-sm font-medium">
@@ -27,7 +28,7 @@ export function DesktopNav({ className, ...props }: DesktopNavProps) {
                 'hover:after:duration-2000 hover:after:absolute hover:after:bottom-0 hover:after:left-1/2 hover:hover:after:left-0 hover:after:h-[2px] hover:after:w-0 hover:hover:after:w-full hover:after:bg-purple-500 hover:after:transition-all hover:after:ease-in-out',
               )}
             >
-              {navItem.name}
+              {t(`${navItem.name}`)}
             </Link>
           );
         })}

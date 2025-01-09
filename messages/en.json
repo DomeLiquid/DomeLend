@@ -1,6 +1,39 @@
 {
   "Header": {
-    "description": "A starter template based on Next.js 14+, featuring app router, shadcn/ui, type-safe environment variables, icons and config setup, and support for next-intl internationalization. Ideal for quickly starting and developing modern web applications.",
-    "title": "Next Template"
+    "Lend": "Lend",
+    "Points": "Points",
+    "Portfolio": "Portfolio"
+  },
+  "Lend": {
+    "Supply": "Supply",
+    "Lend": "Lend",
+    "Borrow": "Borrow",
+    "Repay": "Repay",
+    "Withdraw": "Withdraw",
+    "available-collateral": "Available Collateral",
+    "your-amount": "Your Amount",
+    "health": "Health",
+    "liquidation-price": "Liquidation Price",
+    "pool-size": "Pool Size",
+    "type": "Type",
+    "oracle": "Oracle"
+  },
+  "Table": {
+    "search": "Search",
+    "usd-denominated": "USD Denominated",
+    "asset": "Asset",
+    "price": "Price",
+    "apy": "APY",
+    "weight": "Weight",
+    "tvl": "TVL",
+    "deposits": "Deposits",
+    "borrow-available": "Available",
+    "global-limit": "Global Limit",
+    "total-borrow": "Total Borrow",
+    "utilization": "Utilization",
+    "wallet": "Wallet",
+    "lending": "Lending",
+    "borrowing": "Borrowing",
+    "liquidation-price": "Liquidation Price"
   }
 }

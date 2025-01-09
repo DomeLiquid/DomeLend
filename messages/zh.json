@@ -1,6 +1,39 @@
 {
   "Header": {
-    "description": "基于 Next.js 14+ 的入门模板，包含应用程序路由器、shadcn/ui、类型安全环境变量、图标和配置设置，以及支持 next-intl 国际化。非常适合快速启动和开发现代 Web 应用程序。",
-    "title": "Next 模板"
+    "Lend": "借贷",
+    "Points": "积分",
+    "Portfolio": "资产"
+  },
+  "Lend": {
+    "Supply": "供应",
+    "Lend": "存入",
+    "Borrow": "借出",
+    "Repay": "还款",
+    "Withdraw": "提取",
+    "available-collateral": "可用抵押",
+    "your-amount": "你的数量",
+    "health": "健康",
+    "liquidation-price": "清算价格",
+    "pool-size": "流动性",
+    "type": "类型",
+    "oracle": "Oracle"
+  },
+  "Table": {
+    "search": "搜索",
+    "usd-denominated": "美元计价",
+    "asset": "资产",
+    "price": "价格",
+    "apy": "APY",
+    "weight": "权重",
+    "tvl": "抵押价值比",
+    "deposits": "总存款",
+    "borrow-available": "可用",
+    "global-limit": "总限额",
+    "total-borrow": "总借出",
+    "utilization": "利用率",
+    "wallet": "钱包",
+    "lending": "存入",
+    "borrowing": "借出",
+    "liquidation-price": "清算价格"
   }
 }

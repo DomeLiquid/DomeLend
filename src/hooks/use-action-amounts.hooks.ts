@@ -28,30 +28,53 @@ export function useActionAmounts({
     if (!selectedBank || !assetAmountMap) {
       return 0;
     }
-    return assetAmountMap.get(selectedBank.info.mixinSafeAssetId) ?? 0;
+    const amount = assetAmountMap.get(selectedBank.info.mixinSafeAssetId) ?? 0;
+    // console.log('计算 walletAmount:', {
+    //   symbol: selectedBank.token.symbol,
+    //   amount
+    // });
+    return amount;
   }, [selectedBank, assetAmountMap]);
+
+  // 向上取整到指定小数位数
+  const roundUpToDecimals = (num: number, decimals: number): number => {
+    const multiplier = Math.pow(10, decimals);
+    return Math.ceil(num * multiplier) / multiplier;
+  };
 
   const maxAmount = React.useMemo(() => {
     if (!selectedBank) {
       return 0;
     }
 
+    if (!selectedBank.isActive) {
+      return 0;
+    }
+
+    let result = 0;
     switch (actionMode) {
       case ActionType.Deposit:
-        if (!selectedBank.isActive) return 0;
-        return selectedBank.userInfo.maxDeposit ?? 0;
+        result = selectedBank.userInfo.maxDeposit ?? 0;
+        break;
       case ActionType.Withdraw:
-        if (!selectedBank.isActive) return 0;
-        return selectedBank.userInfo.maxWithdraw ?? 0;
+        result = selectedBank.userInfo.maxWithdraw ?? 0;
+        break;
       case ActionType.Borrow:
-        if (!selectedBank.isActive) return 0;
-        return selectedBank.userInfo.maxBorrow ?? 0;
+        result = selectedBank.userInfo.maxBorrow ?? 0;
+        break;
       case ActionType.Repay:
-        if (!selectedBank.isActive) return 0;
-        return selectedBank.userInfo.maxRepay ?? 0;
-      default:
-        return 0;
+        // 对于还款额度，向上取整到5位小数
+        const rawMaxRepay = selectedBank.userInfo.maxRepay ?? 0;
+        result = roundUpToDecimals(rawMaxRepay, 5);
+        break;
     }
+
+    // console.log('计算 maxAmount:', {
+    //   symbol: selectedBank.token.symbol,
+    //   mode: actionMode,
+    //   result,
+    // });
+    return result;
   }, [selectedBank, actionMode]);
 
   return {

@@ -12,6 +12,8 @@ import { LendingModes } from '@/types/type';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useSortedBanks } from '@/hooks/use-sorted-banks';
 
 const AssetsList = dynamic(
   async () => (await import('@/components/desktop/AssetList')).AssetList,
@@ -52,6 +54,11 @@ export default function LendPage() {
     setIsClient(true);
   }, []);
 
+  // 使用 hook 来维持银行列表顺序
+  const sortedBanks = useSortedBanks(extendedBankInfos);
+
+  const t = useTranslations('Header');
+
   return (
     <>
       {/* <Desktop> */}
@@ -68,7 +75,7 @@ export default function LendPage() {
               useProvider={true}
               lendProps={{
                 accountSummaryArg: accountSummary,
-                banks: extendedBankInfos,
+                banks: sortedBanks, // 使用排序后的银行列表
                 selectedAccount: selectedAccount,
                 requestedLendType:
                   uiState.lendingMode === LendingModes.LEND
@@ -86,9 +93,9 @@ export default function LendPage() {
               }}
             />
           </div>
-          <div className="xl:max-w-8xl mt-8 w-full gap-4 px-4 pb-[64px] pt-[16px]">
+          <div className="mt-8 w-full gap-4 px-4 pb-[64px] pt-[16px] xl:max-w-8xl">
             {isClient && (
-              <div className="xl:max-w-8xl mt-8 w-full gap-4 px-4 pb-[64px] pt-[16px]">
+              <div className="mt-8 w-full gap-4 px-4 pb-[64px] pt-[16px] xl:max-w-8xl">
                 <AssetsList />
               </div>
             )}

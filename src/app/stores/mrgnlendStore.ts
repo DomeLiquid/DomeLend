@@ -248,7 +248,6 @@ const stateCreator: StateCreator<MrgnlendState, [], []> = (set, get) => ({
         console.error('Error fetching account data', error);
       }
     }
-    console.log(newAssetAmountMap);
 
     const extendedBankInfos = banksWithPriceAndToken.reduce(
       (acc: ExtendedBankInfo[], bankWithPriceAndToken) => {

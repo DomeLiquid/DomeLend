@@ -34,6 +34,7 @@ import {
 import { Link } from '@/navigation';
 import { TokenSymbol } from '@/components/token-item';
 import { Asset } from '@/types/account';
+import { IconInfoCircle } from '@tabler/icons-react';
 
 export const EMISSION_MINT_INFO_MAP = new Map<
   string,
@@ -324,7 +325,7 @@ export const getDepositsCell = (depositsData: DepositsData) => {
           )}
           <br />
           <br />
-          <a href="https://docs.DomeFi.com">
+          <a href="https://docs.domefi.one">
             <u>Learn more.</u>
           </a>
         </TooltipContent>
@@ -360,54 +361,59 @@ export const getPositionCell = (positionData: PositionData) => {
                 positionData.walletAmount * positionData.price,
               )
             : `${numeralFormatter(positionData.walletAmount)} ${positionData.symbol}`}
-          {/* {'-'} */}
         </dd>
       </dl>
-      {positionData.positionAmount && (
+      {selectedPositionAmount && (
         <dl className="flex items-center gap-2">
           <dt className="text-xs font-light text-accent-foreground">
             {positionData.isInLendingMode ? 'Lending:' : 'Borrowing:'}
           </dt>
           <dd className="flex items-center gap-1">
-            {clampedNumeralFormatter(positionData.positionAmount) +
-              ' ' +
-              positionData.symbol}
+            {positionData.denominationUSD
+              ? usdFormatter.format(selectedPositionAmount)
+              : numeralFormatter(selectedPositionAmount) +
+                ' ' +
+                positionData.symbol}
           </dd>
         </dl>
       )}
-      {positionData.liquidationPrice && (
-        <dl className="flex items-center gap-2">
-          <dt
-            className={cn(
-              'flex gap-1 text-xs font-light text-accent-foreground',
-              positionData.isUserPositionPoorHealth &&
-                'text-destructive-foreground',
-            )}
-          >
-            {positionData.isUserPositionPoorHealth && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <TriangleAlert size={16} />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Your account is at risk of liquidation</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-            Liquidation price:
-          </dt>
-          <dd
-            className={cn(
-              positionData.isUserPositionPoorHealth &&
-                'text-destructive-foreground',
-            )}
-          >
-            {usdFormatterDyn.format(positionData.liquidationPrice)}
-          </dd>
-        </dl>
-      )}
+      {positionData.liquidationPrice &&
+        ((typeof positionData.liquidationPrice === 'number' &&
+          positionData.liquidationPrice > 0) ||
+          (typeof positionData.liquidationPrice === 'string' &&
+            parseFloat(positionData.liquidationPrice) > 0)) && (
+          <dl className="flex items-center gap-2">
+            <dt
+              className={cn(
+                'flex gap-1 text-xs font-light text-accent-foreground',
+                positionData.isUserPositionPoorHealth &&
+                  'text-destructive-foreground',
+              )}
+            >
+              {positionData.isUserPositionPoorHealth && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TriangleAlert size={16} />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Your account is at risk of liquidation</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              Liquidation price:
+            </dt>
+            <dd
+              className={cn(
+                positionData.isUserPositionPoorHealth &&
+                  'text-destructive-foreground',
+              )}
+            >
+              {usdFormatterDyn.format(positionData.liquidationPrice)}
+            </dd>
+          </dl>
+        )}
     </div>
   );
 };
