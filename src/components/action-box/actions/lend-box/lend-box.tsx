@@ -146,6 +146,13 @@ export const LendBox = ({
   const { amount, debouncedAmount, walletAmount, maxAmount } =
     useActionAmounts(actionAmountsParams);
 
+  const handleMaxClick = useCallback(() => {
+    if (lendMode === ActionType.Withdraw || lendMode === ActionType.Repay) {
+      setIsAllMode(true);
+    }
+    setAmountRaw(maxAmount.toString());
+  }, [lendMode, maxAmount, setAmountRaw, setIsAllMode]);
+
   // useEffect(() => {
   //   console.log('状态更新:', {
   //     bank: selectedBank?.token.symbol,
@@ -307,6 +314,7 @@ export const LendBox = ({
           setAmountRaw={setAmountRaw}
           setSelectedBank={setSelectedBank}
           setIsAllMode={setIsAllMode}
+          handleMaxClick={handleMaxClick}
         />
       </div>
 

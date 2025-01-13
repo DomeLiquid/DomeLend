@@ -75,7 +75,15 @@ const clampedNumeralFormatter = (value: number) => {
   } else if (value < 0.00000001) {
     return '< 0.00000001';
   } else if (value < 1) {
-    return numeral(value).format('0.00000000a');
+    const formatted = numeral(value).format('0.00000000a');
+    // 如果格式化失败或返回 N/A，则使用 toFixed(8) 确保 8 位小数
+    if (formatted === 'N/A') {
+      const fixedStr = value.toFixed(8);
+      // 如果小数位不足 8 位，补足 0
+      const [intPart, decPart = ''] = fixedStr.split('.');
+      return `${intPart}.${decPart.padEnd(8, '0')}`;
+    }
+    return formatted;
   } else {
     return numeral(value).format('0.00a');
   }
