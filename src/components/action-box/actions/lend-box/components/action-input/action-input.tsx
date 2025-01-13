@@ -24,6 +24,7 @@ type ActionInputProps = {
   setAmountRaw: (amount: string) => void;
   setSelectedBank: (bank: ExtendedBankInfo | null) => void;
   setIsAllMode?: (isAll: boolean) => void;
+  handleMaxClick?: () => void;
 };
 
 export const ActionInput = ({
@@ -40,6 +41,7 @@ export const ActionInput = ({
   setAmountRaw,
   setSelectedBank,
   setIsAllMode,
+  handleMaxClick,
 }: ActionInputProps) => {
   const amountInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -177,7 +179,9 @@ export const ActionInput = ({
         <LendingAction
           walletAmount={walletAmount}
           maxAmount={effectiveMaxAmount}
-          onSetAmountRaw={(amount) => handleInputChange(amount)}
+          onSetAmountRaw={
+            handleMaxClick || ((amount) => handleInputChange(amount))
+          }
           selectedBank={selectedBank}
           lendMode={lendMode}
         />
